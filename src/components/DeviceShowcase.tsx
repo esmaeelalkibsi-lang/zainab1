@@ -1,16 +1,53 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const projects = [
-  { id: 0, src: '/project-1.jpg', alt: 'منصة بيوتي في', width: 395, height: 800 },
-  { id: 1, src: '/project-2.jpg', alt: 'منصة صيدلية أكتيف', width: 395, height: 800 },
-  { id: 2, src: '/project-3.jpg', alt: 'حلول تكنولوجيا', width: 395, height: 800 },
-  { id: 3, src: '/project-4.jpg', alt: 'بوابة مدارس التكنولوجيا', width: 395, height: 800 },
+  { id: 0, src: '/project-1.jpg', alt: 'منصة بيوتي في', w: 395, h: 800 },
+  { id: 1, src: '/project-2.jpg', alt: 'منصة صيدلية أكتيف', w: 395, h: 800 },
+  { id: 2, src: '/project-3.jpg', alt: 'حلول تكنولوجيا', w: 395, h: 800 },
+  { id: 3, src: '/project-4.jpg', alt: 'بوابة مدارس التكنولوجيا', w: 395, h: 800 },
 ]
+
+const PAN_SPEED = 110
+const HOLD_TIME = 1.5
+const SLIDE_TIME = 0.45
 
 export default function DeviceShowcase() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [direction, setDirection] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const screenRef = useRef<HTMLDivElement>(null)
+  const [screenW, setScreenW] = useState(0)
+
+  useEffect(() => {
+    const measure = () => {
+      if (screenRef.current) setScreenW(screenRef.current.clientWidth)
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    if (screenRef.current) ro.observe(screenRef.current)
+    return () => ro.disconnect()
+  }, [])
+
+  const panInfo = (() => {
+    const p = projects[activeIndex]
+    if (!screenW) return { distance: 0, duration: HOLD_TIME + 2 }
+    const renderedH = screenW * (p.h / p.w)
+    const screenH = screenW * (10 / 16)
+    const distance = Math.max(0, renderedH - screenH)
+    const panDuration = distance > 0 ? distance / PAN_SPEED : 0
+    return { distance, duration: panDuration + HOLD_TIME }
+  })()
+
+  useEffect(() => {
+    if (!screenW || paused) return
+    const total = (panInfo.duration + SLIDE_TIME) * 1000
+    const timer = setTimeout(() => {
+      setDirection(1)
+      setActiveIndex((prev) => (prev + 1) % projects.length)
+    }, total)
+    return () => clearTimeout(timer)
+  }, [activeIndex, screenW, panInfo.duration, paused])
 
   const goToImage = (index: number) => {
     setDirection(index > activeIndex ? 1 : -1)
@@ -27,34 +64,60 @@ export default function DeviceShowcase() {
     setActiveIndex((prev) => (prev - 1 + projects.length) % projects.length)
   }
 
+  const totalDur = panInfo.duration + SLIDE_TIME
+  const slideFrac = SLIDE_TIME / totalDur
+  const panEndFrac = Math.max(slideFrac + 0.001, (SLIDE_TIME + panInfo.duration - HOLD_TIME) / totalDur)
+
   return (
     <div className="w-full max-w-md flex flex-col items-center">
       <div className="relative w-full">
-        <div className="relative bg-gradient-to-b from-[#D1D6DF] to-[#E9ECF1] rounded-t-2xl p-3 shadow-2xl border border-[#C8CDD8]">
+        <div
+          className="relative bg-gradient-to-b from-[#D1D6DF] to-[#E9ECF1] rounded-t-2xl p-3 shadow-2xl border border-[#C8CDD8]"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
           <div className="flex justify-center mb-2">
             <div className="w-16 h-1.5 bg-[#9CA8B8]/60 rounded-full" />
           </div>
-          <div className="relative w-full overflow-hidden rounded-lg bg-[#1E232C] aspect-[16/10] flex items-center justify-center">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, x: direction > 0 ? 60 : -60 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full h-full"
-            >
-              {projects.map((p, i) => (
-                <img
-                  key={p.id}
-                  src={p.src}
-                  alt={p.alt}
-                  width={p.width}
-                  height={p.height}
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                  className="h-full w-auto object-contain block mx-auto"
-                  style={{ display: i === activeIndex ? 'block' : 'none' }}
+          <div ref={screenRef} className="relative w-full overflow-hidden rounded-lg bg-[#1E232C] aspect-[16/10]">
+            <AnimatePresence custom={direction}>
+              <motion.div
+                key={activeIndex}
+                custom={direction}
+                initial={{ opacity: 0, x: direction > 0 ? 50 : -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction > 0 ? -50 : 50 }}
+                transition={{ duration: SLIDE_TIME, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute inset-0 w-full h-full overflow-hidden"
+              >
+                <motion.img
+                  src={projects[activeIndex].src}
+                  alt={projects[activeIndex].alt}
+                  draggable={false}
+                  initial={{ y: 0 }}
+                  animate={paused
+                    ? { y: -panInfo.distance }
+                    : { y: [0, 0, -panInfo.distance, -panInfo.distance] }
+                  }
+                  transition={paused
+                    ? { duration: 0.4, ease: 'easeOut' }
+                    : {
+                        duration: totalDur,
+                        times: [0, slideFrac, panEndFrac, 1],
+                        ease: 'linear',
+                      }
+                  }
+                  className="w-full h-auto block select-none"
+                  style={{ willChange: 'transform' }}
                 />
-              ))}
-            </motion.div>
+              </motion.div>
+            </AnimatePresence>
+
+            {paused && (
+              <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-white text-[10px] font-medium pointer-events-none">
+                إيقاف مؤقت
+              </div>
+            )}
           </div>
 
           <div className="flex justify-between items-center mt-3">
