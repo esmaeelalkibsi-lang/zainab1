@@ -17,7 +17,7 @@ export default function Footer() {
           className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center"
         >
           <div className="flex items-center gap-3">
-            <img src="/top-web-logo.webp" alt="TOP WEB" width={400} height={267} loading="lazy" className="h-[76px] w-auto object-contain" />
+            <img src="/top-web-logo.png" alt="TOP WEB" loading="lazy" className="h-[76px] w-auto object-contain" />
             <div>
               <h3 className="text-lg font-extrabold tracking-wider text-[#1E232C]">TOP WEB</h3>
               <p className="text-[10px] text-[#7B8598]">نصمم. نبتكر. ننجح معك</p>

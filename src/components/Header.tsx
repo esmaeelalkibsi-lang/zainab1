@@ -66,7 +66,7 @@ export default function Header() {
     <>
       <header dir="rtl" className="relative z-50 max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 flex flex-row-reverse justify-between items-center gap-2">
         <Link to="/" className="flex flex-col items-center shrink-0 bg-transparent p-0 m-0">
-          <img src="/top-web-logo.webp" alt="TOP WEB" width={400} height={267} loading="eager" fetchPriority="high" className="h-11 sm:h-16 w-auto object-contain" />
+          <img src="/top-web-logo.png" alt="TOP WEB" loading="eager" fetchPriority="high" className="h-11 sm:h-16 w-auto object-contain" />
           <span className="mt-0.5 sm:mt-1 text-[8px] sm:text-xs font-semibold tracking-[0.1em] text-[#5A6478] whitespace-nowrap">
             نصمم • نبتكر • ننجح معك
           </span>
@@ -152,7 +152,7 @@ export default function Header() {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between p-4 border-b border-[#1E232C]/8 shrink-0">
-            <img src="/top-web-logo.webp" alt="TOP WEB" width={400} height={267} loading="lazy" className="h-8 w-auto object-contain" />
+            <img src="/top-web-logo.png" alt="TOP WEB" loading="lazy" className="h-8 w-auto object-contain" />
             <button
               onClick={() => setMobileOpen(false)}
               className="flex items-center justify-center w-9 h-9 rounded-lg text-[#2D3540] hover:bg-[#1B3A5F]/10 transition"

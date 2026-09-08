@@ -2,11 +2,11 @@ import { motion } from 'framer-motion'
 import { useTilt3D } from '../hooks/useTilt3D'
 
 const projects = [
-  { title: 'منصة بيوتي في (Beautify) للعناية والتجميل', img: '/z2 copy.webp', width: 800, height: 1624, href: 'https://beautify.makeup' },
-  { title: 'منصة صيدلية أكتيف الرقمية', img: '/z1.webp', width: 800, height: 1624, href: 'https://web-page-generation-tsmu.bolt.host/' },
-  { title: 'حلول تكنولوجيا وتطوير بيئة العمل الرقمية', img: '/83af8b62-f44d-4a8c-9248-7222f43fea7f copy.webp', width: 800, height: 1781, href: 'https://corporate-it-solutio-nzuo.bolt.host' },
-  { title: 'بوابة مدارس التكنولوجيا الحديثة التعليمية', img: '/school.jpg', width: 395, height: 800, href: 'https://modern-tech-school-w-jxxz.bolt.host' },
-  { title: 'منصة المخبز الماليزي (حلا) للمخبوزات الطازجة', img: '/bakery.jpg', width: 395, height: 800, href: 'https://bakery-web-app-tysw.bolt.host' },
+  { title: 'منصة بيوتي في (Beautify) للعناية والتجميل', img: '/project-1.jpg', width: 395, height: 800, href: 'https://beautify.makeup' },
+  { title: 'منصة صيدلية أكتيف الرقمية', img: '/project-2.jpg', width: 395, height: 800, href: 'https://web-page-generation-tsmu.bolt.host/' },
+  { title: 'حلول تكنولوجيا وتطوير بيئة العمل الرقمية', img: '/project-3.jpg', width: 395, height: 800, href: 'https://corporate-it-solutio-nzuo.bolt.host' },
+  { title: 'بوابة مدارس التكنولوجيا الحديثة التعليمية', img: '/project-4.jpg', width: 395, height: 800, href: 'https://modern-tech-school-w-jxxz.bolt.host' },
+  { title: 'منصة المخبز الماليزي (حلا) للمخبوزات الطازجة', img: '/project-5.jpg', width: 395, height: 800, href: 'https://bakery-web-app-tysw.bolt.host' },
 ]
 
 function ProjectCard({ index, title, img, width, height, href }: {

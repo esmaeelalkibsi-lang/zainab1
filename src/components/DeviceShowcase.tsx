@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 const projects = [
-  { id: 0, src: '/z1.webp', alt: 'منصة صيدلية أكتيف', width: 800, height: 1624 },
-  { id: 1, src: '/z2.webp', alt: 'منصة بيوتي في', width: 800, height: 1624 },
-  { id: 2, src: '/z4.webp', alt: 'حلول تكنولوجيا', width: 800, height: 1781 },
-  { id: 3, src: '/z5.webp', alt: 'منصة تعليمية', width: 395, height: 800 },
+  { id: 0, src: '/project-1.jpg', alt: 'منصة بيوتي في', width: 395, height: 800 },
+  { id: 1, src: '/project-2.jpg', alt: 'منصة صيدلية أكتيف', width: 395, height: 800 },
+  { id: 2, src: '/project-3.jpg', alt: 'حلول تكنولوجيا', width: 395, height: 800 },
+  { id: 3, src: '/project-4.jpg', alt: 'بوابة مدارس التكنولوجيا', width: 395, height: 800 },
 ]
 
 export default function DeviceShowcase() {
@@ -34,7 +34,7 @@ export default function DeviceShowcase() {
           <div className="flex justify-center mb-2">
             <div className="w-16 h-1.5 bg-[#9CA8B8]/60 rounded-full" />
           </div>
-          <div className="relative w-full overflow-hidden rounded-lg bg-[#1E232C] aspect-[16/10]">
+          <div className="relative w-full overflow-hidden rounded-lg bg-[#1E232C] aspect-[16/10] flex items-center justify-center">
             <motion.div
               key={activeIndex}
               initial={{ opacity: 0, x: direction > 0 ? 60 : -60 }}
@@ -50,7 +50,7 @@ export default function DeviceShowcase() {
                   width={p.width}
                   height={p.height}
                   loading={i === 0 ? 'eager' : 'lazy'}
-                  className="w-full block"
+                  className="h-full w-auto object-contain block mx-auto"
                   style={{ display: i === activeIndex ? 'block' : 'none' }}
                 />
               ))}
